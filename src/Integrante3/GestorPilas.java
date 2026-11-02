@@ -31,8 +31,8 @@ public class GestorPilas {
                 if (actual == lista.getHead()) {
                     anterior = null;
                 }
-
-                if (actual == lista.getTail()) {
+               
+				if (actual == lista.getTail()) {
                     siguiente = null;
                 }
             }
@@ -40,59 +40,43 @@ public class GestorPilas {
             NodoDoble nodoEliminado = lista.eliminarCancionActual();
 
             if (nodoEliminado != null) {
-
                 RegistroEliminacion registro =  new RegistroEliminacion(nodoEliminado, anterior, siguiente);
                 pilaUndo.push(registro);
                 eliminado = true;
             }
         }
         return eliminado;
-
     }
 
     // Comprueba si la canción puede regresar a su posición original
 
-    private boolean puedeRestaurar(
-
-            ListaDobleReproduccion lista, RegistroEliminacion registro) {
-
+    private boolean puedeRestaurar( ListaDobleReproduccion lista, RegistroEliminacion registro) {
+		
         NodoDoble anterior = registro.getAnterior();
         NodoDoble siguiente = registro.getSiguiente();
-
         boolean valido = false;
 
         if (anterior == null && siguiente == null) {
-
             // La canción era la única de la lista
             valido = lista.getHead() == null;
 
         } else if (anterior == null) {
 
             // La canción estaba al inicio
-
-            valido = siguiente.isEnLista()
-
-                    && lista.getHead() == siguiente;
+            valido = siguiente.isEnLista() && lista.getHead() == siguiente;
 
         } else if (siguiente == null) {
 
             // La canción estaba al final
-
-            valido = anterior.isEnLista()
-
-                    && lista.getTail() == anterior;
-
+            valido = anterior.isEnLista()  && lista.getTail() == anterior;
         } else {
 
             // La canción estaba entre dos nodos
-
             valido = anterior.isEnLista()&& siguiente.isEnLista() 
             		&& anterior.getNext() == siguiente
                     && siguiente.getPrev() == anterior;
-
         }
         return valido;
-
     }
 
     // Deshace la última eliminación
@@ -143,37 +127,30 @@ public class GestorPilas {
 
         if (cancion != null) {
             historial.push(cancion);
-
         }
-
     }
 
     // Consulta la última canción registrada sin retirarla
 
     public Cancion consultarUltimaReproduccion() {
         return historial.peek();
-
     }
 
     // Recupera la última canción registrada y la retira
 
     public Cancion recuperarUltimaReproduccion() {
         return historial.pop();
-
     }
 
     // Comprueba si existen eliminaciones por deshacer
 
     public boolean hayEliminacionesPendientes() {
         return !pilaUndo.isEmpty();
-
     }
 
     // Comprueba si existe historial de reproducción
 
     public boolean hayHistorial() {
         return !historial.isEmpty();
-
     }
-
 }
